@@ -55,7 +55,8 @@ def main():
     # 784 is dimension of the inputs, and 10 is the output dimension.
     model = L.Classifier(MLP(784, 10))
 
-    # Set up GPU usage if necessary.
+    # Set up GPU usage if necessary. args.gpu is a condition as well as an
+    # identification when passed to get_device().
     if args.gpu >= 0:
         chainer.cuda.get_device(args.gpu).use()
         model.to_gpu()
