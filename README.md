@@ -7,3 +7,4 @@ Please contribute and improve freely.
 Topics
 - [Simple Multiplication](https://github.com/surfertas/chainer-tutorials/blob/master/00_multiply.py)
 - [Linear Regression](https://github.com/surfertas/chainer-tutorials/blob/master/01_linear_regression.py)
+- [Logistic Regression](https://github.com/surfertas/chainer-tutorials/blob/master/02_logistic_regression.py)
