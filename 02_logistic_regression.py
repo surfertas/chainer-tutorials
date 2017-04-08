@@ -83,7 +83,7 @@ if __name__=="__main__":
 
 
 """
-Expected output using 1 gpu.
+Expected output.
 
 epoch       main/loss   validation/main/loss  main/accuracy  validation/main/accuracy  elapsed_time
 ...
