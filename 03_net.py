@@ -52,8 +52,9 @@ def main():
 
     
     # Initialize model: Loss function defaults to softmax_cross_entropy.
-    # 784 is dimension of the inputs, and 10 is the output dimension.
-    model = L.Classifier(MLP(784, 10))
+    # 784 is dimension of the inputs, 625 is n_units in hidden layer
+    # and 10 is the output dimension.
+    model = L.Classifier(MLP(625, 10))
 
     # Set up GPU usage if necessary. args.gpu is a condition as well as an
     # identification when passed to get_device().
