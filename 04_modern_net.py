@@ -46,6 +46,10 @@ def main():
                         help='Number of times to train on data set')
     parser.add_argument('--gpu', '-g', type=int, default=-1,
                         help='GPU ID: -1 indicates CPU')
+    parser.add_argument('--frequency', '-f', type=int, default=-1,
+                        help='Frequency of taking a snapshot')
+    parser.add_argument('--resume', '-r', default='',
+                        help='Resume the training from snapshot')
     args = parser.parse_args()
 
 
@@ -87,6 +91,10 @@ def main():
     # Evaluate the model at end of each epoch
     trainer.extend(extensions.Evaluator(test_iter, model, device=args.gpu))
 
+    # Dump a computational graph from 'loss' variable at the first iteration
+    # The "main" refers to the target link of the "main" optimizer.
+    trainer.extend(extensions.dump_graph('main/loss'))
+
 
     # Helper functions (extensions) to monitor progress on stdout.
     report_params = [
@@ -100,6 +108,37 @@ def main():
     trainer.extend(extensions.LogReport())
     trainer.extend(extensions.PrintReport(report_params))
     trainer.extend(extensions.ProgressBar())
+
+
+    # Here we add a bit more boiler plate code to help in output of useful
+    # information in related to training. Very intuitive and great for post
+    # analysis.
+    # source:
+    # https://github.com/pfnet/chainer/blob/master/examples/mnist/train_mnist.py
+
+    # Take a snapshot for each specified epoch
+    frequency = args.epoch if args.frequency == -1 else max(1, args.frequency)
+    trainer.extend(extensions.snapshot(), trigger=(frequency, 'epoch'))
+
+    # Write a log of evaluation statistics for each epoch
+    trainer.extend(extensions.LogReport())
+
+    # Save two plot images to the result dir
+    if extensions.PlotReport.available():
+        trainer.extend(
+            extensions.PlotReport(
+                ['main/loss', 'validation/main/loss'],
+                'epoch', file_name='loss.png'))
+        trainer.extend(
+            extensions.PlotReport(
+                ['main/accuracy', 'validation/main/accuracy'],
+                'epoch', file_name='accuracy.png'))
+
+
+    if args.resume:
+        # Resume from a snapshot (NumPy NPZ format and HDF5 format available)
+        # http://docs.chainer.org/en/latest/reference/serializers.html
+        chainer.serializers.load_npz(args.resume, trainer)
 
 
     # Run trainer
