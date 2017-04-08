@@ -26,9 +26,13 @@ class MyModel(chainer.Chain):
 
 
 def generate_data():
-    #Need to reshape so that each input is an array.
+    # Need to reshape so that each input is an array.
     reshape = lambda x: np.reshape(x, (len(x),1))
-
+    
+    # Notice the type specification (np.float32)
+    # For regression, use np.float32 for both input & output, while for
+    # classification using softmax_cross_entropy, the output(label) needs to be
+    # of type np.int32.
     X = np.linspace(-1, 1, 101).astype(np.float32)
     Y = (2 * X + np.random.randn(*X.shape) * 0.33).astype(np.float32)
     return reshape(X),reshape(Y)
@@ -75,3 +79,22 @@ def main():
 
 if __name__=="__main__":
     main()
+
+"""
+Expected output.
+
+epoch       main/loss 
+...
+90          0.104054    
+91          0.104079    
+92          0.104037    
+93          0.104005    
+94          0.104142    
+95          0.104292    
+96          0.103934    
+97          0.104091    
+98          0.103952    
+99          0.104034    
+100         0.103947    
+[[ 1.98888695]]
+"""
