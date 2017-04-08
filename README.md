@@ -9,3 +9,4 @@ Topics
 - [Linear Regression](https://github.com/surfertas/chainer-tutorials/blob/master/01_linear_regression.py)
 - [Logistic Regression](https://github.com/surfertas/chainer-tutorials/blob/master/02_logistic_regression.py)
 - [Feedforward Neural Network (Multilayer Perceptron)](https://github.com/surfertas/chainer-tutorials/blob/master/03_net.py)
+- [Deep Feedforward Neural Network](https://github.com/surfertas/chainer-tutorials/blob/master/04_modern_net.py)
