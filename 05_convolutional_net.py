@@ -34,7 +34,7 @@ class MyCNN(chainer.Chain):
             conv3=L.Convolution2D(64, 128, ksize=3, stride=1, pad=1),
             # Note that chainer abstracts the reshape step here.
             fc4=L.Linear(2048, 625),
-            fc5=L.Linear(625,10)
+            fc5=L.Linear(625,n_out)
         )
     
     def __call__(self, x):
