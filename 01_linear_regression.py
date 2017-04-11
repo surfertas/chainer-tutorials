@@ -13,7 +13,7 @@ import chainer.links as L
 
 
 class MyModel(chainer.Chain):
-    # Define model to be called later by L.Classifer()
+    # Define model to be called later by L.Classifier()
 
     def __init__(self, n_out):
         super(MyModel, self).__init__(
