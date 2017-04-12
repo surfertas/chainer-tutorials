@@ -11,3 +11,4 @@ Topics
 - [Feedforward Neural Network (Multilayer Perceptron)](https://github.com/surfertas/chainer-tutorials/blob/master/03_net.py)
 - [Deep Feedforward Neural Network](https://github.com/surfertas/chainer-tutorials/blob/master/04_modern_net.py)
 - [Convolutional Neural Network](https://github.com/surfertas/chainer-tutorials/blob/master/05_convolutional_net.py)
+- [Denoising Autoencoder](https://github.com/surfertas/chainer-tutorials/blob/master/06_autoencoder.py)

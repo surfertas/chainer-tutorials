@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Reference: http://deeplearning.net/tutorial/dA.html
 
 try:
     import matplotlib
