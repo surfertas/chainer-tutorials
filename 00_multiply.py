@@ -19,4 +19,3 @@ b = chainer.Variable(np.array([3], dtype=np.float32))
 
 y = a * b
 print("{} should equal [ 9.]".format(y.data))
-

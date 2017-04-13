@@ -32,16 +32,17 @@ def visualize_image(images, save_name):
     """
     dim = images.shape[0]
     n_image_rows = int(np.ceil(np.sqrt(dim)))
-    n_image_cols = int(np.ceil(dim * 1.0/n_image_rows))
-    gs = gridspec.GridSpec(n_image_rows,n_image_cols,top=1., bottom=0.,
+    n_image_cols = int(np.ceil(dim * 1.0 / n_image_rows))
+    gs = gridspec.GridSpec(n_image_rows, n_image_cols, top=1., bottom=0.,
                            right=1., left=0., hspace=0., wspace=0.)
 
-    for g,count in zip(gs,range(int(dim))):
+    for g, count in zip(gs, range(int(dim))):
         ax = plt.subplot(g)
-        ax.imshow(images[count,:].astype(np.float32).reshape((28,28)))
+        ax.imshow(images[count, :].astype(np.float32).reshape((28, 28)))
         ax.set_xticks([])
         ax.set_yticks([])
     plt.savefig(save_name + '_vis.png')
+
 
 def get_corrupted_input(x, corrupt_lvl):
     """Returns the corrupted version of the input x.
@@ -51,19 +52,19 @@ def get_corrupted_input(x, corrupt_lvl):
     Returns:
         image: Corrupted image array.
     """
-    mask = np.random.RandomState(1).binomial(size=x.shape, n=1, p=(1.-corrupt_lvl))
+    mask = np.random.RandomState(1).binomial(size=x.shape, n=1, p=(1. - corrupt_lvl))
     return mask.astype(np.float32) * x
-
 
 
 class MyDAE(chainer.Chain):
     # Define denoising autoencoder to be called later by Classifier()
+
     def __init__(self, n_inputs, n_hidden):
         super(MyDAE, self).__init__(
             encoder=L.Linear(n_inputs, n_hidden)
         )
         self.add_param('decoder_bias', n_inputs)
-        # Need to initialize 'decoder_bias' or will get a bunch of nans. 
+        # Need to initialize 'decoder_bias' or will get a bunch of nans.
         self.decoder_bias.data[...] = 0.
 
     def __call__(self, x):
@@ -73,7 +74,7 @@ class MyDAE(chainer.Chain):
         h = F.sigmoid(self.encoder(x))
         h = F.linear(h, F.transpose(self.encoder.W), self.decoder_bias)
         return F.sigmoid(h)
-    
+
 
 def main():
     parser = argparse.ArgumentParser(description='Chainer-Tutorial: CNN')
@@ -92,7 +93,6 @@ def main():
                         help='Sets the corruption level')
     args = parser.parse_args()
 
-
     # Load mnist data
     # http://docs.chainer.org/en/latest/reference/datasets.html
     train, test = chainer.datasets.get_mnist(withlabel=False)
@@ -101,16 +101,15 @@ def main():
     # the corrupted image.
     data = test_tup = tuple_dataset.TupleDataset(train, corrupted)
 
-    # Define iterators.   
+    # Define iterators.
     train_iter = chainer.iterators.SerialIterator(data, args.batch_size)
     test_iter = chainer.iterators.SerialIterator(test_tup, args.batch_size,
                                                  repeat=False, shuffle=False)
 
-
     # Current bottleneck dimension set at 10. Worth changing around to visualize
     # the sensitivity to this parameter.
     model = L.Classifier(MyDAE(784, 10), lossfun=F.mean_squared_error)
-    model.compute_accuracy=False
+    model.compute_accuracy = False
 
     if args.gpu >= 0:
         chainer.cuda.get_device(args.gpu).use()
@@ -129,11 +128,11 @@ def main():
 
     # Helper functions (extensions) to monitor progress on stdout.
     report_params = [
-        'epoch', 
+        'epoch',
         'main/loss',
         'validation/main/loss',
         'elapsed_time'
-        ]
+    ]
     trainer.extend(extensions.LogReport())
     trainer.extend(extensions.PrintReport(report_params))
     trainer.extend(extensions.ProgressBar())
@@ -155,7 +154,7 @@ def main():
 
     # Run trainer
     trainer.run()
-    
+
     # If running with GPU need to use cupy when predicting with forward pass or
     # will get type error warning.
     xp = cp if args.gpu >= 0 else np
@@ -166,8 +165,7 @@ def main():
         imgs.append(pred.data[0])
 
     visualize_image(np.array(imgs), "test")
-    
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()
-
